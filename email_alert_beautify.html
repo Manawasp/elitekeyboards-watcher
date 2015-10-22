@@ -16,22 +16,6 @@
         border-radius: 0px;
         transition: background-color 300ms ease-out 0s;
       }
-      a.button {
-        text-decoration: none;
-        font-size: 0.8775rem;
-        padding: 0.625rem 1.25rem 0.6875rem;
-        margin-bottom: 0px;
-        font-family: "Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
-        font-weight: normal;
-        line-height: normal;
-        margin: 0px 0px 1.25rem;
-        position: relative;
-        text-align: center;
-        -moz-appearance: none;
-        display: inline-block;
-        background-color: #426CE2;
-        color: #FFF;
-      }
       a.button:hover, a.button:hover {color: #FFF;background-color:#42439E;}
     </style>
   </head>
@@ -45,7 +29,9 @@
                 <tr>
                   <td valign="bottom" style="padding:20px 16px 12px">
                     <div style="max-width:600px;margin:0 auto;text-align:center">
-                      EliteKeyboards Notification
+                      <a target="_blank" href="<%= @url %>">
+                      <img style="width:120px;min-height:36px" src="http://www.topre.co.jp/common/img/main_logo.png" />
+                      </a>
                     </div>
                   </td>
                 </tr>
@@ -59,7 +45,62 @@
               <tbody>
                 <tr>
                   <td valign="top">
-
+                    <div style="max-width:600px;margin:0 auto; padding:0 12px;">
+                      <div style="background:white;border-radius:0.5rem;padding:2rem;margin-bottom:1rem">
+                        <h2 style="color:#4789E5;margin:0 0 12px;line-height:30px">
+                          Hi Clovis,
+                        </h2>
+                        <table width="100%" align="center" cellspacing="0" cellpadding="0" border="0">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div style="margin:10px 0px;width:100%;word-break:break-word;clear:left;font-size:1rem;line-height:18px;color:#555549;min-height:36px;">
+                                  Il y a du nouveau dans le store d'<a href="#">EliteKeyboard</a> :
+                                  <hr style="border:none;border-bottom:1px solid #ececec;margin:1.5rem 0;width:100%">
+                                </div>
+                                <table>
+                                  {{ range $element := . }}
+                                  <tr>
+                                    <td>
+                                      <img src="http://www.elitekeyboards.com/{{$element.Image}}"/>
+                                    </td>
+                                    <td style="padding-left:20px">
+                                      <div style="margin-bottom:10px"><b>{{$element.Name}}</b></div>
+                                      {{ if $element.Available }}
+                                      <span style="color:#27ae60"><small>Product {{$element.Model}} is available at ${{$element.Price}}</small></span>
+                                      {{ else }}
+                                      <span style="color:#F62459">
+                                        <small>Product {{$element.Model}} is out of stock</small>
+                                      </span>
+                                      {{ end }}
+                                    </td>
+                                  </tr>
+                                  {{ end }}
+                                </table>
+                                <hr style="border:none;border-bottom:1px solid #ececec;margin:1.5rem 0;width:100%">
+                                <div style="width:100%;word-break:break-word;clear:left;font-size:15px;line-height:18px;color:#555549;min-height:36px;text-align:center">
+                                  <a href="http://www.elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless" class="button" style="
+                                    text-decoration: none;
+                                    font-size: 0.8775rem;
+                                    padding: 0.625rem 1.25rem 0.6875rem;
+                                    margin-bottom: 0px;
+                                    font-family: 'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;
+                                    font-weight: normal;
+                                    line-height: normal;
+                                    margin: 0px 0px 1.25rem;
+                                    position: relative;
+                                    text-align: center;
+                                    -moz-appearance: none;
+                                    display: inline-block;
+                                    background-color: #426CE2;
+                                    color: #FFF;">GO TO SHOP</a>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -74,7 +115,10 @@
                   <td valign="top" align="center" style="padding:16px 8px 24px">
                     <div style="marx-width:600px;margin:0 auto">
                       <p style="margin-top:16px;font-size:0.9rem;line-height:20px;color:#989EA6;">
-                        Product available ! {{.Name}}
+                        Made by
+                        <a href="http://cloviskyndt.co;">Clovis Kyndt</a>
+                        <br />
+                        Paris, France
                       </p>
                     </div>
                   </td>

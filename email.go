@@ -1,20 +1,14 @@
 package main
 
 import (
-    "fmt"
     "bytes"
     "text/template"
     "github.com/sendgrid/sendgrid-go"
+    "fmt"
 )
 
-type EmailData struct {
-  Name string
-  Price int
-}
-
-func main() {
+func sendEmail(d []Keyboard) {
     // generate template
-    d := EmailData{Name: "SE19TO", Price: 200}
     var buf bytes.Buffer
     t, _ := template.ParseFiles("email_alert_beautify.html")
     t.Execute(&buf, d)
