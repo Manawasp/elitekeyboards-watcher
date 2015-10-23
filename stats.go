@@ -2,6 +2,7 @@ package main
 
 
 import (
+  "os"
   "io/ioutil"
   "encoding/json"
   "net/http"
@@ -11,7 +12,8 @@ import (
 )
 
 func extractStats() (keyboards Keyboards) {
-  file, e := ioutil.ReadFile("./keyboards-update.json")
+  pwd, _ := os.Getwd()
+  file, e := ioutil.ReadFile(pwd+"/keyboards-update.json")
   if e == nil {
     json.Unmarshal(file, &keyboards)
   }
@@ -30,7 +32,7 @@ func compareStats(nKeyboards, oKeyboards Keyboards) (arr []Keyboard) {
 
 func saveStats(keyboards Keyboards) {
   b, _ := json.Marshal(keyboards)
-  err := ioutil.WriteFile("keyboards-update.json", b, 0644)
+  err := ioutil.WriteFile(pwd+"/keyboards-update.json", b, 0644)
   if err != nil {
     panic(err)
   }
