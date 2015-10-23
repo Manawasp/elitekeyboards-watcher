@@ -2,7 +2,6 @@ package main
 
 
 import (
-  "os"
   "io/ioutil"
   "encoding/json"
   "net/http"
@@ -11,9 +10,11 @@ import (
   "regexp"
 )
 
+const SAVE_FILE string = "keyboards-update.json"
+const URL_EK string = "https://elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless"
+
 func extractStats() (keyboards Keyboards) {
-  pwd, _ := os.Getwd()
-  file, e := ioutil.ReadFile(pwd+"/keyboards-update.json")
+  file, e := ioutil.ReadFile(getExecDir() + SAVE_FILE)
   if e == nil {
     json.Unmarshal(file, &keyboards)
   }
@@ -32,8 +33,7 @@ func compareStats(nKeyboards, oKeyboards Keyboards) (arr []Keyboard) {
 
 func saveStats(keyboards Keyboards) {
   b, _ := json.Marshal(keyboards)
-  pwd, _ := os.Getwd()
-  err := ioutil.WriteFile(pwd+"/keyboards-update.json", b, 0644)
+  err := ioutil.WriteFile(getExecDir() + SAVE_FILE, b, 0644)
   if err != nil {
     panic(err)
   }
@@ -42,7 +42,7 @@ func saveStats(keyboards Keyboards) {
 func newStats() (keyboards Keyboards) {
   keyboards.Keyboards = make(map[string]Keyboard)
   // fetch and read a web page
-  resp, _ := http.Get("https://elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless")
+  resp, _ := http.Get(URL_EK)
   page, _ := ioutil.ReadAll(resp.Body)
 
   // parse the web page
