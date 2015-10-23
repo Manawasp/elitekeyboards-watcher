@@ -1,16 +1,18 @@
 package main
 
 import (
-    "bytes"
-    "text/template"
-    "github.com/sendgrid/sendgrid-go"
-    "fmt"
+  "os"
+  "bytes"
+  "text/template"
+  "github.com/sendgrid/sendgrid-go"
+  "fmt"
 )
 
 func sendEmail(d []Keyboard) {
+    pwd, _ := os.Getwd()
     // generate template
     var buf bytes.Buffer
-    t, _ := template.ParseFiles("email_alert_beautify.html")
+    t, _ := template.ParseFiles(pwd+"/email_alert_beautify.html")
     t.Execute(&buf, d)
     s := buf.String()
     // send email
