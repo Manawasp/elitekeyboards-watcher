@@ -32,6 +32,7 @@ func compareStats(nKeyboards, oKeyboards Keyboards) (arr []Keyboard) {
 
 func saveStats(keyboards Keyboards) {
   b, _ := json.Marshal(keyboards)
+  pwd, _ := os.Getwd()
   err := ioutil.WriteFile(pwd+"/keyboards-update.json", b, 0644)
   if err != nil {
     panic(err)
