@@ -4,6 +4,7 @@ import (
 	"github.com/BurntSushi/toml"
 	log "github.com/Sirupsen/logrus"
 
+	"github.com/manawasp/elitekeyboards-watcher/email"
 	kbs "github.com/manawasp/elitekeyboards-watcher/keyboards"
 )
 
@@ -20,19 +21,20 @@ func main() {
 	// Retrieve AppConfig
 	var conf AppConfig
 	if _, err := toml.DecodeFile("config.toml", &conf); err != nil {
-		// handle error
 		log.Errorf("Error: Unable to decode config file, %v", err)
 		return
 	}
 
 	// Get new stats from the website
-	keyboards := kbs.WebParse(conf.URL)
+	keyboards, err := kbs.WebParse(conf.URL)
+	if err != nil {
+		log.Errorf("Error: kbs.WebParse, %v.", err)
+	}
 
 	// Load previous stats and compare them
 	arr := kbs.Diff(keyboards, kbs.PreviousState(conf.DB))
-	log.Println(arr)
 	if len(arr) > 0 {
-		// email.Send(SENDGRID_KEY, conf.HTML, arr)
+		email.Send(SENDGRID_KEY, conf.HTML, arr)
 		kbs.Save(conf.DB, keyboards)
 	}
 }
