@@ -1,0 +1,3 @@
+DB = "keyboards.json"
+HTML = "email/template.html"
+URL = "https://elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless"
