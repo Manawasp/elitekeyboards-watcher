@@ -3,9 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
+	"os"
 	"text/template"
 
 	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 const NOTIFY_TPL string = "email_alert_beautify.html"
@@ -17,17 +20,23 @@ func sendEmail(d []Keyboard) {
 	t, _ := template.ParseFiles(getExecDir() + NOTIFY_TPL)
 	t.Execute(&buf, d)
 	s := buf.String()
+	// Config message
+	from := mail.NewEmail("Elitekeyboards - Notification", "clovis.kyndt@gmail.com")
+	subject := "EliteKeyboards Product Availability"
+	to := mail.NewEmail("Clovis Kyndt", "clovis.kyndt@gmail.com")
+	content := mail.NewContent("text/html", s)
+	m := mail.NewV3MailInit(from, subject, to, content)
 	// send email
-	sg := sendgrid.NewSendGridClientWithApiKey(SENDGRID_KEY)
-	message := sendgrid.NewMail()
-	message.AddTo("clovss.mna@gmail.com")
-	message.AddToName("Clovis Kyndt")
-	message.SetSubject("EliteKeyboards Product Availability")
-	message.SetHTML(s)
-	message.SetFrom("clovss.mna@gmail.com")
-	if r := sg.Send(message); r == nil {
-		fmt.Println("Email sent!")
+	request := sendgrid.GetRequest(os.Getenv("SENDGRID_API_KEY"), "/v3/mail/send", "https://api.sendgrid.com")
+	request.Method = "POST"
+	request.Body = mail.GetRequestBody(m)
+	response, err := sendgrid.API(request)
+	if err != nil {
+		log.Println(err)
 	} else {
-		fmt.Println(r)
+		fmt.Println("Email sent!")
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
 	}
 }
