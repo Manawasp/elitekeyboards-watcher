@@ -10,4 +10,6 @@ type Keyboard struct {
 }
 
 // Keyboards TODO: doc
-type Keyboards map[string]Keyboard
+type State struct {
+	Keyboards map[string]Keyboard `toml:"keyboards"`
+}

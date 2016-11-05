@@ -12,8 +12,9 @@ import (
 // WebParse retrieve html from the given url and look for keyboards
 // note: this "parser" only work with the current elitekeyboards website at
 // this day 05 Nomvember 2016
-func WebParse(url string) (keyboards Keyboards) {
-	keyboards = make(map[string]Keyboard)
+func WebParse(url string) *State {
+	state := &State{}
+	state.Keyboards = make(map[string]Keyboard)
 	// fetch and read a web page
 	resp, _ := http.Get(url)
 	page, _ := ioutil.ReadAll(resp.Body)
@@ -57,7 +58,7 @@ func WebParse(url string) (keyboards Keyboards) {
 		}
 
 		// Insert into the Keboards Collector
-		keyboards[kb.Model] = kb
+		state.Keyboards[kb.Model] = kb
 	}
-	return
+	return state
 }
