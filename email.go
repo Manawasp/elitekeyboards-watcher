@@ -2,11 +2,10 @@ package main
 
 import (
 	"bytes"
-	"fmt"
-	"log"
 	"os"
 	"text/template"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
@@ -32,11 +31,11 @@ func sendEmail(d []Keyboard) {
 	request.Body = mail.GetRequestBody(m)
 	response, err := sendgrid.API(request)
 	if err != nil {
-		log.Println(err)
+		log.Error(err)
 	} else {
-		fmt.Println("Email sent!")
-		fmt.Println(response.StatusCode)
-		fmt.Println(response.Body)
-		fmt.Println(response.Headers)
+		log.Info("Email sent!")
+		log.Println(response.StatusCode)
+		log.Println(response.Body)
+		log.Println(response.Headers)
 	}
 }
