@@ -17,7 +17,7 @@ You need install dependencies libraries (used by gokogiri) :
 Then install go library by hand (go get) or use [glide](http://glide.sh)
 
 ```
-# glide install
+$ glide install
 ```
 You are ready to compile
 ```
