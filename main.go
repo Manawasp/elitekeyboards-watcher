@@ -5,19 +5,20 @@ import (
 	kbs "github.com/manawasp/elitekeyboards-watcher/keyboards"
 )
 
-const SAVE_FILE string = "keyboards.json"
-const URL_EK string = "https://elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless"
-const NOTIFY_TPL string = "email/template.html"
 const SENDGRID_KEY string = "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"
 
 func main() {
+	DB := "keyboards.json"
+	HTML := "email/template.html"
+	URL := "https://elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless"
+
 	// Get new stats from the website
-	keyboards := kbs.WebParse(URL_EK)
+	keyboards := kbs.WebParse(URL)
 
 	// Load previous stats and compare them
-	arr := kbs.Diff(keyboards, kbs.PreviousState(SAVE_FILE))
+	arr := kbs.Diff(keyboards, kbs.PreviousState(DB))
 	if len(arr) > 0 {
-		email.Send(SENDGRID_KEY, NOTIFY_TPL, arr)
-		kbs.Save(SAVE_FILE, keyboards)
+		email.Send(SENDGRID_KEY, HTML, arr)
+		kbs.Save(DB, keyboards)
 	}
 }
