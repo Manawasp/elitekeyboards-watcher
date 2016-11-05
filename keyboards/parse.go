@@ -9,10 +9,10 @@ import (
 	"github.com/moovweb/gokogiri/xpath"
 )
 
-func WebParse() (keyboards Keyboards) {
+func WebParse(url string) (keyboards Keyboards) {
 	keyboards = make(map[string]Keyboard)
 	// fetch and read a web page
-	resp, _ := http.Get(URL_EK)
+	resp, _ := http.Get(url)
 	page, _ := ioutil.ReadAll(resp.Body)
 
 	// parse the web page

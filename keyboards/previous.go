@@ -7,8 +7,8 @@ import (
 	"github.com/manawasp/elitekeyboards-watcher/utils"
 )
 
-func PreviousState() (keyboards Keyboards) {
-	file, e := ioutil.ReadFile(utils.GetExecDir() + SAVE_FILE)
+func PreviousState(path string) (keyboards Keyboards) {
+	file, e := ioutil.ReadFile(utils.GetExecDir() + path)
 	if e == nil {
 		json.Unmarshal(file, &keyboards)
 	}
