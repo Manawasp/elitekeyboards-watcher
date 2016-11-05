@@ -2,7 +2,6 @@ package email
 
 import (
 	"bytes"
-	"os"
 	"text/template"
 
 	log "github.com/Sirupsen/logrus"
@@ -13,13 +12,10 @@ import (
 	"github.com/manawasp/elitekeyboards-watcher/utils"
 )
 
-const NOTIFY_TPL string = "email/template.html"
-const SENDGRID_KEY string = "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"
-
-func Send(d []kbs.Keyboard) {
+func Send(sendgridKey, pathTemplate string, d []kbs.Keyboard) {
 	// generate template
 	var buf bytes.Buffer
-	t, _ := template.ParseFiles(utils.GetExecDir() + NOTIFY_TPL)
+	t, _ := template.ParseFiles(utils.GetExecDir() + pathTemplate)
 	t.Execute(&buf, d)
 	s := buf.String()
 	// Config message
@@ -29,7 +25,7 @@ func Send(d []kbs.Keyboard) {
 	content := mail.NewContent("text/html", s)
 	m := mail.NewV3MailInit(from, subject, to, content)
 	// send email
-	request := sendgrid.GetRequest(os.Getenv("SENDGRID_API_KEY"), "/v3/mail/send", "https://api.sendgrid.com")
+	request := sendgrid.GetRequest(sendgridKey, "/v3/mail/send", "https://api.sendgrid.com")
 	request.Method = "POST"
 	request.Body = mail.GetRequestBody(m)
 	response, err := sendgrid.API(request)
