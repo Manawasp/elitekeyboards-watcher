@@ -1,14 +1,14 @@
 package main
 
 import (
+	"os"
+
 	"github.com/BurntSushi/toml"
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/manawasp/elitekeyboards-watcher/email"
 	kbs "github.com/manawasp/elitekeyboards-watcher/keyboards"
 )
-
-const SENDGRID_KEY string = "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"
 
 type AppConfig struct {
 	DB          string `toml:"DB"`
@@ -25,6 +25,11 @@ func main() {
 		return
 	}
 
+	// Get api sendgrid key
+	if len(conf.SendgridKey) > 0 {
+		conf.SendgridKey = os.Getenv("SENDGRID_API_KEY")
+	}
+
 	// Get new stats from the website
 	keyboards, err := kbs.WebParse(conf.URL)
 	if err != nil {
@@ -34,7 +39,7 @@ func main() {
 	// Load previous stats and compare them
 	arr := kbs.Diff(keyboards, kbs.PreviousState(conf.DB))
 	if len(arr) > 0 {
-		email.Send(SENDGRID_KEY, conf.HTML, arr)
+		email.Send(conf.SendgridKey, conf.HTML, arr)
 		kbs.Save(conf.DB, keyboards)
 	}
 }
