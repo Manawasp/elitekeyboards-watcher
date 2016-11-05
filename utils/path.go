@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// GetExecDir utils retrieve path of the bin dir
 func GetExecDir() (rez string) {
 	arr := strings.Split(os.Args[0], "/")
 	i := 0

@@ -12,6 +12,8 @@ import (
 	"github.com/manawasp/elitekeyboards-watcher/utils"
 )
 
+// Send use sendgrid APP to send an email to the defined user with the keyboards
+// change
 func Send(sendgridKey, pathTemplate string, d []kbs.Keyboard) {
 	// generate template
 	var buf bytes.Buffer
