@@ -1,0 +1,14 @@
+package: github.com/manawasp/elitekeyboards-watcher
+import:
+- package: github.com/BurntSushi/toml
+  version: ^0.2.0
+- package: github.com/Sirupsen/logrus
+  version: ^0.11.0
+- package: github.com/jbowtie/gokogiri
+  version: ^4.7.32
+  subpackages:
+  - xpath
+- package: github.com/sendgrid/sendgrid-go
+  version: ^3.3.1
+  subpackages:
+  - helpers/mail
