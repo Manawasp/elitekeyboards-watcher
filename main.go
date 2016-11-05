@@ -20,13 +20,15 @@ func main() {
 	// Retrieve AppConfig
 	var conf AppConfig
 	if _, err := toml.DecodeFile("config.toml", &conf); err != nil {
-		// handle error
 		log.Errorf("Error: Unable to decode config file, %v", err)
 		return
 	}
 
 	// Get new stats from the website
-	keyboards := kbs.WebParse(conf.URL)
+	keyboards, err := kbs.WebParse(conf.URL)
+	if err != nil {
+		log.Errorf("Error: kbs.WebParse, %v.", err)
+	}
 
 	// Load previous stats and compare them
 	arr := kbs.Diff(keyboards, kbs.PreviousState(conf.DB))

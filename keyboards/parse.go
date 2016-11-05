@@ -5,27 +5,39 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/moovweb/gokogiri"
-	"github.com/moovweb/gokogiri/xpath"
+	"github.com/jbowtie/gokogiri"
+	"github.com/jbowtie/gokogiri/xpath"
 )
 
 // WebParse retrieve html from the given url and look for keyboards
 // note: this "parser" only work with the current elitekeyboards website at
 // this day 05 Nomvember 2016
-func WebParse(url string) *State {
+func WebParse(url string) (*State, error) {
 	state := &State{}
 	state.Keyboards = make(map[string]Keyboard)
 	// fetch and read a web page
-	resp, _ := http.Get(url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
 	page, _ := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	// parse the web page
-	doc, _ := gokogiri.ParseHtml(page)
+	doc, err := gokogiri.ParseHtml(page)
+	if err != nil {
+		return nil, err
+	}
 	defer doc.Free()
 
 	// Extract Keyboard Product
 	xps := xpath.Compile("//table[@class='products']/tr[@class='odd']")
-	ss, _ := doc.Root().Search(xps)
+	ss, err := doc.Root().Search(xps)
+	if err != nil {
+		return nil, err
+	}
 
 	// Precompile Regex
 	titleXps := xpath.Compile(".//td[@class='desc']/a")
@@ -60,5 +72,5 @@ func WebParse(url string) *State {
 		// Insert into the Keboards Collector
 		state.Keyboards[kb.Model] = kb
 	}
-	return state
+	return state, nil
 }
