@@ -1,4 +1,4 @@
-package main
+package email
 
 import (
 	"bytes"
@@ -8,15 +8,18 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
+
+	kbs "github.com/manawasp/elitekeyboards-watcher/keyboards"
+	"github.com/manawasp/elitekeyboards-watcher/utils"
 )
 
-const NOTIFY_TPL string = "email_alert_beautify.html"
+const NOTIFY_TPL string = "email/template.html"
 const SENDGRID_KEY string = "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"
 
-func sendEmail(d []Keyboard) {
+func Send(d []kbs.Keyboard) {
 	// generate template
 	var buf bytes.Buffer
-	t, _ := template.ParseFiles(getExecDir() + NOTIFY_TPL)
+	t, _ := template.ParseFiles(utils.GetExecDir() + NOTIFY_TPL)
 	t.Execute(&buf, d)
 	s := buf.String()
 	// Config message

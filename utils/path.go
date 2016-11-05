@@ -1,11 +1,11 @@
-package main
+package utils
 
 import (
 	"os"
 	"strings"
 )
 
-func getExecDir() (rez string) {
+func GetExecDir() (rez string) {
 	arr := strings.Split(os.Args[0], "/")
 	i := 0
 	for i < len(arr)-1 {

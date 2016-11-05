@@ -1,4 +1,4 @@
-package main
+package keyboards
 
 // Keyboard type regroup informations about keyboard on http://elitekeyboards.com
 type Keyboard struct {
@@ -10,6 +10,4 @@ type Keyboard struct {
 }
 
 // Keyboards TODO: doc
-type Keyboards struct {
-	Keyboards map[string]Keyboard
-}
+type Keyboards map[string]Keyboard

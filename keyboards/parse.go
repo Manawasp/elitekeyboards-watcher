@@ -1,7 +1,6 @@
-package main
+package keyboards
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -10,37 +9,8 @@ import (
 	"github.com/moovweb/gokogiri/xpath"
 )
 
-const SAVE_FILE string = "keyboards-update.json"
-const URL_EK string = "https://elitekeyboards.com/products.php?sub=topre_keyboards,rftenkeyless"
-
-func extractStats() (keyboards Keyboards) {
-	file, e := ioutil.ReadFile(getExecDir() + SAVE_FILE)
-	if e == nil {
-		json.Unmarshal(file, &keyboards)
-	}
-	return keyboards
-}
-
-func compareStats(nKeyboards, oKeyboards Keyboards) (arr []Keyboard) {
-	for key, _ := range nKeyboards.Keyboards {
-		_, exist := oKeyboards.Keyboards[key]
-		if !exist || (oKeyboards.Keyboards[key].Available != nKeyboards.Keyboards[key].Available) {
-			arr = append(arr, nKeyboards.Keyboards[key])
-		}
-	}
-	return
-}
-
-func saveStats(keyboards Keyboards) {
-	b, _ := json.Marshal(keyboards)
-	err := ioutil.WriteFile(getExecDir()+SAVE_FILE, b, 0644)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func newStats() (keyboards Keyboards) {
-	keyboards.Keyboards = make(map[string]Keyboard)
+func WebParse() (keyboards Keyboards) {
+	keyboards = make(map[string]Keyboard)
 	// fetch and read a web page
 	resp, _ := http.Get(URL_EK)
 	page, _ := ioutil.ReadAll(resp.Body)
@@ -53,7 +23,7 @@ func newStats() (keyboards Keyboards) {
 	xps := xpath.Compile("//table[@class='products']/tr[@class='odd']")
 	ss, _ := doc.Root().Search(xps)
 
-	// Procompile Regex
+	// Precompile Regex
 	titleXps := xpath.Compile(".//td[@class='desc']/a")
 	descXps := xpath.Compile(".//td/span[@class='msize']")
 	reg, _ := regexp.Compile(`<[-\./\w\":=\s\;]*>`)
@@ -84,7 +54,7 @@ func newStats() (keyboards Keyboards) {
 		}
 
 		// Insert into the Keboards Collector
-		keyboards.Keyboards[kb.Model] = kb
+		keyboards[kb.Model] = kb
 	}
 	return
 }

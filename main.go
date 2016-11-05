@@ -2,18 +2,21 @@ package main
 
 import (
 	log "github.com/Sirupsen/logrus"
+
+	"github.com/manawasp/elitekeyboards-watcher/email"
+	kbs "github.com/manawasp/elitekeyboards-watcher/keyboards"
 )
 
 func main() {
 	// Get new stats from the website
-	keyboards := newStats()
-	// Load Previous Stats
-	k := extractStats()
-	// Compare New Stats and Previous
-	arr := compareStats(keyboards, k)
+	keyboards := kbs.WebParse()
+
+	// Load previous stats and compare them
+	arr := kbs.Diff(keyboards, kbs.PreviousState())
+
 	log.Println(len(arr))
 	if len(arr) > 0 {
-		sendEmail(arr)
-		saveStats(keyboards)
+		email.Send(arr)
+		kbs.Save(keyboards)
 	}
 }
